@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  File      File[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index(fields: [email(sort: "Asc")], name: "email_index")
+  @@map("users")
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  fileName  String   @map("file_name")
+  location  String
+  type      String
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String   @map("user_email")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index(fields: [uuid(sort: "Asc")], name: "uuid_index")
+  @@map("files")
+}
