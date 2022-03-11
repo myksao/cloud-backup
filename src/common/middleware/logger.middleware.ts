@@ -9,6 +9,7 @@ export class LoggerMiddleware implements NestMiddleware {
   }
   use(req: Request, res: Response, next: NextFunction) {
     this.logger.debug({
+      path: req.route.path,
       Request: {
         param: req.params,
         query: req.query,

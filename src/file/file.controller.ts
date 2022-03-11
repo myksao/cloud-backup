@@ -15,6 +15,7 @@ import {
   HttpStatus,
   StreamableFile,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -69,7 +70,7 @@ export class FileController {
 
   @Role(Admin)
   @UseGuards(RoleGuard)
-  @Get('flag')
+  @Delete('flag')
   async flagFiles(@Req() req, @Body() fileIds: any, @Query('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: string[]) {
     const result = fileIds.id ? await this.fileService.flagFiles(req.user, fileIds.id) : await this.fileService.flagFiles(req.user, ids);
     if (result === fileIds.id.length || result === ids.length) {
